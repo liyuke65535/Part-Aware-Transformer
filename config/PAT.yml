@@ -1,6 +1,6 @@
 MODEL:
   PRETRAIN_CHOICE: 'imagenet'
-  PRETRAIN_PATH: "/home/nihao/.cache/torch/hub/checkpoints" # root of pretrain path
+  PRETRAIN_PATH: "../../.cache/torch/hub/checkpoints" # root of pretrain path
   METRIC_LOSS_TYPE: 'triplet'
   IF_LABELSMOOTH: 'on'
   IF_WITH_CENTER: 'no'
@@ -24,7 +24,7 @@ INPUT:
 DATASETS:
   TRAIN: ('Market1501',)
   TEST: ("DukeMTMC",)
-  ROOT_DIR: ('/home/nihao/data') # root of datasets
+  ROOT_DIR: ('../../data') # root of datasets
 
 DATALOADER:
   SAMPLER: 'softmax_triplet'
@@ -54,6 +54,6 @@ TEST:
   NECK_FEAT: 'before'
   FEAT_NORM: True
 
-LOG_ROOT: '/home/nihao/data/exp/' # root of log file
+LOG_ROOT: '../../data/exp/' # root of log file
 TB_LOG_ROOT: './tb_log/'
 LOG_NAME: 'PAT/market/vit_base'
