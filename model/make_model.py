@@ -6,7 +6,6 @@ from model.backbones.vit_pytorch import deit_tiny_patch16_224_TransReID, local_a
 import torch
 import torch.nn as nn
 
-from model.backbones.vit_pytorch import SelfDistillVisionTransformer
 from .backbones.resnet import BasicBlock, ResNet, Bottleneck
 from .backbones import vit_base_patch16_224_TransReID, vit_small_patch16_224_TransReID, deit_small_patch16_224_TransReID
 
