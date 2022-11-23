@@ -863,15 +863,6 @@ def deit_tiny_patch16_224_TransReID(img_size=(256, 128), stride_size=16, drop_pa
 
     return model
 
-def vit_base_patch16_224_TransReID_SSL(img_size=(256, 128), stride_size=16, drop_path_rate=0.1, **kwargs):
-    model = TransReID(img_size=img_size, patch_size=16, stride_size=stride_size, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True, drop_path_rate=drop_path_rate, stem_conv=True, **kwargs)
-    return model
-
-def vit_small_patch16_224_TransReID_SSL(img_size=(256, 128), stride_size=16, drop_path_rate=0.1, **kwargs):
-    model = TransReID(img_size=img_size, patch_size=16, stride_size=stride_size, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,drop_path_rate=drop_path_rate,  stem_conv=True,  **kwargs)
-    model.in_planes = 384
-    return model
-
 def _no_grad_trunc_normal_(tensor, mean, std, a, b):
     # Cut & paste from PyTorch official master until it's in a few official releases - RW
     # Method based on https://people.sc.fsu.edu/~jburkardt/presentations/truncated_normal.pdf
