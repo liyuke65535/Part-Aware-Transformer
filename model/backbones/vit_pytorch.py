@@ -737,40 +737,6 @@ class Local_Attention_ViT(nn.Module):
         total = sum([param.nelement() for param in self.parameters()])
         print("Number of parameter: %.2fM" % (total/1e6))
 
-class SelfDistillVisionTransformer(TransReID):
-    def __init__(self, img_size=224, patch_size=16, stride_size=16, in_chans=3, num_classes=1000, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True, qk_scale=None, drop_rate=0, attn_drop_rate=0, drop_path_rate=0, hybrid_backbone=None, norm_layer=nn.LayerNorm):
-        super().__init__(img_size, patch_size, stride_size, in_chans, num_classes, embed_dim, depth, num_heads, mlp_ratio, qkv_bias, qk_scale, drop_rate, attn_drop_rate, drop_path_rate, hybrid_backbone, norm_layer)
-        self.depth = depth
-        self.norm_rb = nn.ModuleList(
-            [norm_layer(embed_dim) for i in range(depth-1)]
-        )
-    
-    def forward(self, x):
-        B = x.shape[0]
-        x = self.patch_embed(x)
-
-        cls_tokens = self.cls_token.expand(B, -1, -1)  # stole cls_tokens impl from Phil Wang, thanks
-        x = torch.cat((cls_tokens, x), dim=1)
-
-        x = x + self.pos_embed
-
-        x = self.pos_drop(x)
-        
-        layer_wise_tokens = []
-        for i, blk in enumerate(self.blocks):
-            x = blk(x)
-            layer_wise_tokens.append(x)
-            # if i < self.depth - 1: # through 12 LN
-            #     layer_wise_tokens.append(self.norm_rb[i](x))
-            # else:
-            #     layer_wise_tokens.append(self.norm(x))
-            
-        layer_wise_tokens = [self.norm(t) for t in layer_wise_tokens] # through 1 LN
-        # layer_wise_tokens.append(self.norm(layer_wise_tokens[-1])) # no LN, add res to final
-
-        return [(x[:, 0]) for x in layer_wise_tokens]
-
-
 def resize_pos_embed(posemb, posemb_new, hight, width):
     # Rescale the grid of position embeddings when loading from state_dict. Adapted from
     # https://github.com/google-research/vision_transformer/blob/00883dd691c63a6830751563748663526e811cee/vit_jax/checkpoint.py#L224
