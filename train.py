@@ -77,21 +77,18 @@ if __name__ == '__main__':
         model.base.patch_embed.proj.bias.requires_grad = False
         print("====== freeze patch_embed for stability ======")
 
-    loss_func, center_criterion = build_loss(cfg, num_classes=num_classes)
-    if cfg.MODEL.SOFT_LABEL and cfg.MODEL.NAME == 'local_attention_vit':
-        print("========using soft label========")
+    loss_func = build_loss(cfg, num_classes=num_classes)
+    
 
-    optimizer, optimizer_center = make_optimizer(cfg, model, center_criterion)
-
+    optimizer = make_optimizer(cfg, model)
     scheduler = create_scheduler(cfg, optimizer)
     
-    
-    ################## patch loss ##############################
-    #centers = Patchloss.SmoothingForImage(momentum=args.mm, num=args.num)
+    ################## patch loss ####################
     patch_centers = Patchloss.PatchMemory(momentum=0.1, num=1)
     pc_criterion = Patchloss.Pedal(scale=cfg.MODEL.PC_SCALE, k=cfg.MODEL.CLUSTER_K).cuda()
-    ################## patch loss ##############################
-
+    if cfg.MODEL.SOFT_LABEL and cfg.MODEL.NAME == 'local_attention_vit':
+        print("========using soft label========")
+    ################## patch loss ####################
     
     do_train_dict = {
         'local_attention_vit': local_attention_vit_do_train_with_amp
@@ -100,11 +97,9 @@ if __name__ == '__main__':
         ori_vit_do_train_with_amp(
             cfg,
             model,
-            center_criterion,
             train_loader,
             val_loader,
             optimizer,
-            optimizer_center,
             scheduler,
             loss_func,
             num_query, args.local_rank,
@@ -115,11 +110,9 @@ if __name__ == '__main__':
         do_train_dict[model_name](
             cfg,
             model,
-            center_criterion,
             train_loader,
             val_loader,
             optimizer,
-            optimizer_center,
             scheduler,
             loss_func,
             num_query, args.local_rank,

@@ -15,11 +15,9 @@ from torch.utils.tensorboard import SummaryWriter
 
 def local_attention_vit_do_train_with_amp(cfg,
              model,
-             center_criterion,
              train_loader,
              val_loader,
              optimizer,
-             optimizer_center,
              scheduler,
              loss_fn,
              num_query, local_rank,
@@ -92,7 +90,6 @@ def local_attention_vit_do_train_with_amp(cfg,
             t_domains = informations['others']['domains']
 
             optimizer.zero_grad()
-            optimizer_center.zero_grad()
             img = img.to(device)
             target = vid.to(device)
             target_cam = camid.to(device)
@@ -128,11 +125,6 @@ def local_attention_vit_do_train_with_amp(cfg,
             scaler.step(optimizer)
             scaler.update()
 
-            if 'center' in cfg.MODEL.METRIC_LOSS_TYPE:
-                for param in center_criterion.parameters():
-                    param.grad.data *= (1. / cfg.SOLVER.CENTER_LOSS_WEIGHT)
-                scaler.step(optimizer_center)
-                scaler.update()
             # score = scores[-1]
             if isinstance(score, list):
                 acc = (score[0].max(1)[1] == target).float().mean()

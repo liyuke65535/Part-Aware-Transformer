@@ -6,8 +6,6 @@ from .center_loss import CenterLoss
 
 def make_loss(cfg, num_classes):
     sampler = cfg.DATALOADER.SAMPLER
-    feat_dim = 2048
-    center_criterion = CenterLoss(num_classes=num_classes, feat_dim=feat_dim, use_gpu=True)  # center loss
     if 'triplet' in cfg.MODEL.METRIC_LOSS_TYPE:
         if cfg.MODEL.NO_MARGIN:
             triplet = TripletLoss()
@@ -27,7 +25,7 @@ def make_loss(cfg, num_classes):
         def loss_func(score, feat, target):
             return F.cross_entropy(score, target)
 
-    elif cfg.DATALOADER.SAMPLER == 'softmax_triplet' or 'GS':
+    elif cfg.DATALOADER.SAMPLER == 'softmax_triplet':
         def loss_func(score, feat, target, target_cam):
             if cfg.MODEL.METRIC_LOSS_TYPE == 'triplet':
                 if cfg.MODEL.IF_LABELSMOOTH == 'on':
@@ -71,6 +69,6 @@ def make_loss(cfg, num_classes):
     else:
         print('expected sampler should be softmax, triplet, softmax_triplet or softmax_triplet_center'
               'but got {}'.format(cfg.DATALOADER.SAMPLER))
-    return loss_func, center_criterion
+    return loss_func
 
 
