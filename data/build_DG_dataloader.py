@@ -16,7 +16,7 @@ from .common import CommDataset
 from .datasets import DATASET_REGISTRY
 from .transforms import build_transforms
 
-_root = os.getenv("REID_DATASETS", "/home/nihao/data")
+_root = os.getenv("REID_DATASETS", "../../data")
 
 
 def build_reid_train_loader(cfg):
