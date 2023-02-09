@@ -197,9 +197,9 @@ class Attention(nn.Module):
         return x
 
 '''
-our local attention
+our part attention
 '''
-class Local_Attention(nn.Module):
+class part_Attention(nn.Module):
     def __init__(self, dim, num_heads=8, qkv_bias=False, qk_scale=None, attn_drop=0., proj_drop=0.):
         super().__init__()
         self.num_heads = num_heads
@@ -251,14 +251,14 @@ class Block(nn.Module):
         return x
 
 '''
-local attention block
+part attention block
 '''
-class Local_Attention_Block(nn.Module):
+class part_Attention_Block(nn.Module):
     def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0., H=16, W=8,
                  drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm):
         super().__init__()
         self.norm1 = norm_layer(dim)
-        self.local_attn = Local_Attention(
+        self.part_attn = part_Attention(
             dim, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop, proj_drop=drop)
         # NOTE: drop path for stochastic depth, we shall see if this is better than dropout here
         self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
@@ -267,8 +267,8 @@ class Local_Attention_Block(nn.Module):
         self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
 
     def forward(self, x, mask = None):
-        # local attention
-        x = x + self.drop_path(self.local_attn(self.norm1(x), mask))
+        # part attention
+        x = x + self.drop_path(self.part_attn(self.norm1(x), mask))
         x = x + self.drop_path(self.mlp(self.norm2(x)))
         return x
 
@@ -559,9 +559,9 @@ class TransReID(nn.Module):
         print("Number of parameter: %.2fM" % (total/1e6))
 
 '''
-our local attention vit
+our part attention vit
 '''
-class Local_Attention_ViT(nn.Module):
+class part_Attention_ViT(nn.Module):
     def __init__(self, img_size=224, patch_size=16, stride_size=16, in_chans=3, num_classes=1000, embed_dim=768, depth=12,
                  num_heads=12, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0., drop_path_rate=0., hybrid_backbone=None, norm_layer=nn.LayerNorm, **kwargs):
         super().__init__()
@@ -606,7 +606,7 @@ class Local_Attention_ViT(nn.Module):
         # self.mask = self.attn_mask_generate(num_patches, self.patch_embed.num_y, self.patch_embed.num_x)
         
         self.blocks = nn.ModuleList([
-            Local_Attention_Block(
+            part_Attention_Block(
                 dim=embed_dim, num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale,
                 drop=drop_rate, attn_drop=attn_drop_rate, drop_path=dpr[i], norm_layer=norm_layer)
             for i in range(depth)])
@@ -722,7 +722,7 @@ class Local_Attention_ViT(nn.Module):
                 count += 4
                 continue
             elif 'attn' in k:
-                self.state_dict()[k.replace('attn', 'local_attn')].copy_(v)
+                self.state_dict()[k.replace('attn', 'part_attn')].copy_(v)
                 count += 1
                 continue
             try:
@@ -769,48 +769,48 @@ def resize_pos_embed_part_vit(posemb, posemb_new, hight, width):
     posemb = torch.cat([posemb_token, posemb_token, posemb_token, posemb_token, posemb_grid], dim=1)
     return posemb
 
-def local_attention_vit_large(img_size=(256, 128), stride_size=16, drop_rate=0.0, attn_drop_rate=0.0, drop_path_rate=0.1, **kwargs):
-    model = Local_Attention_ViT(
+def part_attention_vit_large(img_size=(256, 128), stride_size=16, drop_rate=0.0, attn_drop_rate=0.0, drop_path_rate=0.1, **kwargs):
+    model = part_Attention_ViT(
         img_size=img_size, patch_size=16, stride_size=stride_size, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,\
         drop_path_rate=drop_path_rate, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
 
     return model
 
-def local_attention_vit_base(img_size=(256, 128), stride_size=16, drop_rate=0.0, attn_drop_rate=0.0, drop_path_rate=0.1, **kwargs):
-    model = Local_Attention_ViT(
+def part_attention_vit_base(img_size=(256, 128), stride_size=16, drop_rate=0.0, attn_drop_rate=0.0, drop_path_rate=0.1, **kwargs):
+    model = part_Attention_ViT(
         img_size=img_size, patch_size=16, stride_size=stride_size, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,\
         drop_path_rate=drop_path_rate, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
 
     return model
 
-def local_attention_vit_base_p32(img_size=(256, 128), stride_size=32, drop_rate=0.0, attn_drop_rate=0.0, drop_path_rate=0.1, **kwargs):
-    model = Local_Attention_ViT(
+def part_attention_vit_base_p32(img_size=(256, 128), stride_size=32, drop_rate=0.0, attn_drop_rate=0.0, drop_path_rate=0.1, **kwargs):
+    model = part_Attention_ViT(
         img_size=img_size, patch_size=32, stride_size=stride_size, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,\
         drop_path_rate=drop_path_rate, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
 
     return model
 
-def local_attention_vit_small(img_size=(256, 128), stride_size=16, drop_rate=0.0, attn_drop_rate=0.0, drop_path_rate=0.1, **kwargs):
+def part_attention_vit_small(img_size=(256, 128), stride_size=16, drop_rate=0.0, attn_drop_rate=0.0, drop_path_rate=0.1, **kwargs):
     kwargs.setdefault('qk_scale', 768 ** -0.5)
-    model = Local_Attention_ViT(
+    model = part_Attention_ViT(
         img_size=img_size, patch_size=16, stride_size=stride_size, embed_dim=768, depth=8, num_heads=8, mlp_ratio=3., qkv_bias=False,\
         drop_path_rate=drop_path_rate, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
 
     return model
 
-def local_attention_deit_small(img_size=(256, 128), stride_size=16, drop_path_rate=0.0, drop_rate=0.0, attn_drop_rate=0.0, **kwargs):
-    model = Local_Attention_ViT(
+def part_attention_deit_small(img_size=(256, 128), stride_size=16, drop_path_rate=0.0, drop_rate=0.0, attn_drop_rate=0.0, **kwargs):
+    model = part_Attention_ViT(
         img_size=img_size, patch_size=16, stride_size=stride_size, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
         drop_path_rate=drop_path_rate, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
 
     return model
 
-def local_attention_deit_tiny(img_size=(256, 128), stride_size=16, drop_path_rate=0.0, drop_rate=0.0, attn_drop_rate=0.0, **kwargs):
-    model = Local_Attention_ViT(
+def part_attention_deit_tiny(img_size=(256, 128), stride_size=16, drop_path_rate=0.0, drop_rate=0.0, attn_drop_rate=0.0, **kwargs):
+    model = part_Attention_ViT(
         img_size=img_size, patch_size=16, stride_size=stride_size, embed_dim=192, depth=12, num_heads=3, mlp_ratio=4, qkv_bias=True,
         drop_path_rate=drop_path_rate, drop_rate=drop_rate, attn_drop_rate=attn_drop_rate, norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
 

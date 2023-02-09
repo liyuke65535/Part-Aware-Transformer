@@ -63,7 +63,7 @@ _C.MODEL.PATCH_EMBED_TYPE = ''
 # fixed patch embed or not
 _C.MODEL.FREEZE_PATCH_EMBED = True
 
-# local views
+# part views
 _C.MODEL.PC_SCALE = 0.02
 _C.MODEL.PC_LOSS = True
 _C.MODEL.PC_LR = 1.0

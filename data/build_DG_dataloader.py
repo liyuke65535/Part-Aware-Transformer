@@ -3,7 +3,6 @@ import torch
 import sys
 import collections.abc as container_abcs
 
-from data.transforms.build import build_transform_local
 # from torch._six import container_abcs, string_classes, int_classes
 int_classes = int
 string_classes = str

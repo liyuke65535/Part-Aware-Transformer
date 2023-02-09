@@ -1,4 +1,4 @@
-from processor.local_attn_vit_processor import local_attention_vit_do_train_with_amp
+from PAT.processor.part_attention_vit_processor import part_attention_vit_do_train_with_amp
 from processor.ori_vit_processor_with_amp import ori_vit_do_train_with_amp
 from utils.logger import setup_logger
 from data.build_DG_dataloader import build_reid_train_loader, build_reid_test_loader
@@ -86,12 +86,12 @@ if __name__ == '__main__':
     ################## patch loss ####################
     patch_centers = Patchloss.PatchMemory(momentum=0.1, num=1)
     pc_criterion = Patchloss.Pedal(scale=cfg.MODEL.PC_SCALE, k=cfg.MODEL.CLUSTER_K).cuda()
-    if cfg.MODEL.SOFT_LABEL and cfg.MODEL.NAME == 'local_attention_vit':
+    if cfg.MODEL.SOFT_LABEL and cfg.MODEL.NAME == 'part_attention_vit':
         print("========using soft label========")
     ################## patch loss ####################
     
     do_train_dict = {
-        'local_attention_vit': local_attention_vit_do_train_with_amp
+        'part_attention_vit': part_attention_vit_do_train_with_amp
     }
     if model_name not in do_train_dict.keys():
         ori_vit_do_train_with_amp(

@@ -2,7 +2,7 @@ import logging
 import os
 import random
 # from threading import local
-from model.backbones.vit_pytorch import deit_tiny_patch16_224_TransReID, local_attention_deit_small, local_attention_deit_tiny, local_attention_vit_base, local_attention_vit_base_p32, local_attention_vit_large, local_attention_vit_small, vit_base_patch32_224_TransReID, vit_large_patch16_224_TransReID
+from model.backbones.vit_pytorch import deit_tiny_patch16_224_TransReID, part_attention_deit_small, part_attention_deit_tiny, part_attention_vit_base, part_attention_vit_base_p32, part_attention_vit_large, part_attention_vit_small, vit_base_patch32_224_TransReID, vit_large_patch16_224_TransReID
 import torch
 import torch.nn as nn
 
@@ -237,9 +237,9 @@ class build_vit(nn.Module):
         logger.info("Number of parameter: %.2fM" % (total/1e6))
 
 '''
-local attention vit
+part attention vit
 '''
-class build_local_attention_vit(nn.Module):
+class build_part_attention_vit(nn.Module):
     def __init__(self, num_classes, cfg, factory, pretrain_tag='imagenet'):
         super().__init__()
         self.cfg = cfg
@@ -255,7 +255,7 @@ class build_local_attention_vit(nn.Module):
         self.neck_feat = cfg.TEST.NECK_FEAT
         self.in_planes = 768
 
-        print('using Transformer_type: local token vit as a backbone')
+        print('using Transformer_type: part token vit as a backbone')
 
         self.gap = nn.AdaptiveAvgPool2d(1)
 
@@ -287,7 +287,7 @@ class build_local_attention_vit(nn.Module):
     def forward(self, x):
         layerwise_tokens = self.base(x) # B, N, C
         layerwise_cls_tokens = [t[:, 0] for t in layerwise_tokens] # cls token
-        local_feat_list = layerwise_tokens[-1][:, 1: 4] # 3, 768
+        part_feat_list = layerwise_tokens[-1][:, 1: 4] # 3, 768
 
         layerwise_part_tokens = [[t[:, i] for i in range(1,4)] for t in layerwise_tokens] # 12 3 768
         feat = self.bottleneck(layerwise_cls_tokens[-1])
@@ -328,22 +328,22 @@ __factory_T_type = {
 }
 
 __factory_LAT_type = {
-    'vit_large_patch16_224_TransReID': local_attention_vit_large,
-    'vit_base_patch16_224_TransReID': local_attention_vit_base,
-    'vit_base_patch32_224_TransReID': local_attention_vit_base_p32,
-    'deit_base_patch16_224_TransReID': local_attention_vit_base,
-    'vit_small_patch16_224_TransReID': local_attention_vit_small,
-    'deit_small_patch16_224_TransReID': local_attention_deit_small,
-    'deit_tiny_patch16_224_TransReID': local_attention_deit_tiny,
+    'vit_large_patch16_224_TransReID': part_attention_vit_large,
+    'vit_base_patch16_224_TransReID': part_attention_vit_base,
+    'vit_base_patch32_224_TransReID': part_attention_vit_base_p32,
+    'deit_base_patch16_224_TransReID': part_attention_vit_base,
+    'vit_small_patch16_224_TransReID': part_attention_vit_small,
+    'deit_small_patch16_224_TransReID': part_attention_deit_small,
+    'deit_tiny_patch16_224_TransReID': part_attention_deit_tiny,
 }
 
 def make_model(cfg, modelname, num_class, sd_flag=False, head_flag=False, camera_num=None, view_num=None):
     if modelname == 'vit':
         model = build_vit(num_class, cfg, __factory_T_type)
         print('===========building vit===========')
-    elif modelname == 'local_attention_vit':
-        model = build_local_attention_vit(num_class, cfg, __factory_LAT_type)
-        print('===========building our local attention vit===========')
+    elif modelname == 'part_attention_vit':
+        model = build_part_attention_vit(num_class, cfg, __factory_LAT_type)
+        print('===========building our part attention vit===========')
     else:
         model = Backbone(modelname, num_class, cfg)
         print('===========building ResNet===========')

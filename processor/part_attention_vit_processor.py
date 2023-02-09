@@ -13,7 +13,7 @@ import torch.nn.functional as F
 from data.build_DG_dataloader import build_reid_test_loader, build_reid_train_loader
 from torch.utils.tensorboard import SummaryWriter
 
-def local_attention_vit_do_train_with_amp(cfg,
+def part_attention_vit_do_train_with_amp(cfg,
              model,
              train_loader,
              val_loader,

@@ -3,7 +3,8 @@ from config import cfg
 import argparse
 from data.build_DG_dataloader import build_reid_test_loader
 from model import make_model
-from processor import do_inference
+from PAT.processor.part_attention_vit_processor import do_inference as do_inf_pat
+from processor.ori_vit_processor_with_amp import do_inference as do_inf
 from utils.logger import setup_logger
 
 
@@ -28,7 +29,7 @@ if __name__ == "__main__":
     if output_dir and not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    logger = setup_logger("transreid", output_dir, if_train=False)
+    logger = setup_logger("PAT", output_dir, if_train=False)
     logger.info(args)
 
     if args.config_file != "":
@@ -45,4 +46,7 @@ if __name__ == "__main__":
 
     for testname in cfg.DATASETS.TEST:
         val_loader, num_query = build_reid_test_loader(cfg, testname)
-        do_inference(cfg, model, val_loader, num_query)
+        if cfg.MODEL.NAME == 'part_attention_vit':
+            do_inf_pat(cfg, model, val_loader, num_query)
+        else:
+            do_inf(cfg, model, val_loader, num_query)
