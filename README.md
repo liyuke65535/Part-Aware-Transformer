@@ -25,7 +25,7 @@ As for datasets, follow the instructions in [MetaBIN](https://github.com/bismex/
 ## 4. Modify the config file
 ```
 # modify the model path and dataset paths of the config file
-vim ./config/SHS_DSM_vit_b.yml
+vim ./config/PAT.yml
 ```
 
 ## 5. Train a model
