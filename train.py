@@ -1,4 +1,4 @@
-from PAT.processor.part_attention_vit_processor import part_attention_vit_do_train_with_amp
+from processor.part_attention_vit_processor import part_attention_vit_do_train_with_amp
 from processor.ori_vit_processor_with_amp import ori_vit_do_train_with_amp
 from utils.logger import setup_logger
 from data.build_DG_dataloader import build_reid_train_loader, build_reid_test_loader
