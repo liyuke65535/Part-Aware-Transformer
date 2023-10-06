@@ -3,7 +3,7 @@ from config import cfg
 import argparse
 from data.build_DG_dataloader import build_reid_test_loader
 from model import make_model
-from PAT.processor.part_attention_vit_processor import do_inference as do_inf_pat
+from processor.part_attention_vit_processor import do_inference as do_inf_pat
 from processor.ori_vit_processor_with_amp import do_inference as do_inf
 from utils.logger import setup_logger
 
