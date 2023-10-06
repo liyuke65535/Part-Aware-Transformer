@@ -11,8 +11,8 @@ git clone https://github.com/liyuke65535/Part-Aware-Transformer.git
 
 ## 2. Prepare your environment
 ```
-conda create -n screid python==3.10
-conda activate screid
+conda create -n pat python==3.10
+conda activate pat
 bash enviroments.sh
 ```
 
