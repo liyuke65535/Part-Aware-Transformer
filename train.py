@@ -77,8 +77,7 @@ if __name__ == '__main__':
         model.base.patch_embed.proj.bias.requires_grad = False
         print("====== freeze patch_embed for stability ======")
 
-    loss_func = build_loss(cfg, num_classes=num_classes)
-    
+    loss_func, center_cri = build_loss(cfg, num_classes=num_classes)
 
     optimizer = make_optimizer(cfg, model)
     scheduler = create_scheduler(cfg, optimizer)

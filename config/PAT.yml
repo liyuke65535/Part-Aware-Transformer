@@ -1,6 +1,7 @@
 MODEL:
   PRETRAIN_CHOICE: 'imagenet'
   PRETRAIN_PATH: "../../.cache/torch/hub/checkpoints" # root of pretrain path
+  PRETRAIN_PATH: "/home/liyuke/.cache/torch/checkpoints" # root of pretrain path
   METRIC_LOSS_TYPE: 'triplet'
   IF_LABELSMOOTH: 'on'
   IF_WITH_CENTER: 'no'
@@ -25,6 +26,7 @@ DATASETS:
   TRAIN: ('Market1501',)
   TEST: ("DukeMTMC",)
   ROOT_DIR: ('../../data') # root of datasets
+  ROOT_DIR: ('/home/liyuke/data') # root of datasets
 
 DATALOADER:
   SAMPLER: 'softmax_triplet'
@@ -55,5 +57,6 @@ TEST:
   FEAT_NORM: True
 
 LOG_ROOT: '../../data/exp/' # root of log file
+LOG_ROOT: '/home/liyuke/data/exp/' # root of log file
 TB_LOG_ROOT: './tb_log/'
 LOG_NAME: 'PAT/market/vit_base'

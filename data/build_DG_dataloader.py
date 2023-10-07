@@ -34,6 +34,7 @@ def build_reid_train_loader(cfg):
     camera_all = list()
 
     # load datasets
+    _root = cfg.DATASETS.ROOT_DIR
     for d in cfg.DATASETS.TRAIN:
         if d == 'CUHK03_NP':
             dataset = DATASET_REGISTRY.get('CUHK03')(root=_root, cuhk03_labeled=False)
@@ -74,7 +75,7 @@ def build_reid_train_loader(cfg):
 
 def build_reid_test_loader(cfg, dataset_name, opt=None, flag_test=True, shuffle=False, only_gallery=False, only_query=False, eval_time=False):
     test_transforms = build_transforms(cfg, is_train=False)
-
+    _root = cfg.DATASETS.ROOT_DIR
     if opt is None:
         dataset = DATASET_REGISTRY.get(dataset_name)(root=_root)
         if comm.is_main_process():
