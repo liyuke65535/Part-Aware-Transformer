@@ -42,4 +42,13 @@ vim ./config/PAT.yml
 python test.py --config ./config/PAT.yml
 ```
 ## Citation
+If you find this repo useful for your research, you're welcome to cite our paper.
+```
+@inproceedings{ni2023part,
+  title={Part-Aware Transformer for Generalizable Person Re-identification},
+  author={Ni, Hao and Li, Yuke and Gao, Lianli and Shen, Heng Tao and Song, Jingkuan},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={11280--11289},
+  year={2023}
+}
 ```
