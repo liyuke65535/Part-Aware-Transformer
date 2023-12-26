@@ -41,7 +41,7 @@ from .veri import VeRi
 from .veri_keypoint import VeRi_keypoint
 from .vehicleid import VehicleID, SmallVehicleID, MediumVehicleID, LargeVehicleID
 from .veriwild import VeRiWild, SmallVeRiWild, MediumVeRiWild, LargeVeRiWild
-
+from .randperson import RandPerson
 
 
 __all__ = [k for k in globals().keys() if "builtin" not in k and not k.startswith("_")]
