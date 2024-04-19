@@ -22,7 +22,7 @@ Our method achieves state-of-the-art performance under most DG ReID settings.
 <div align=center><img src="https://github.com/liyuke65535/Part-Aware-Transformer/assets/39180877/a0f002c3-ef46-4d63-a3f0-e90dfe0ed61c"></div>
 <div align=center><img src="https://github.com/liyuke65535/Part-Aware-Transformer/assets/39180877/191e0958-46b1-4262-b850-e3264e919a4d"></div>
 
-
+# Instructions
 
 Here are some instructions to run our code.
 Our code is based on [TransReID](https://github.com/damo-cv/TransReID), thanks for their excellent work.
