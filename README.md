@@ -1,6 +1,29 @@
 # Part-Aware-Transformer
 Official repo for "Part-Aware Transformer for Generalizable Person Re-identification" [ICCV 2023]
 
+<div align=center><img src="https://github.com/liyuke65535/Part-Aware-Transformer/assets/39180877/a92d863d-43c7-48ca-b4d5-d34eef237fd5"></div>
+
+
+
+
+## Abstract
+Domain generalization person re-identification (DG-ReID) aims to train a model on source domains and generalize well on unseen domains.
+Vision Transformer usually yields better generalization ability than common CNN networks under distribution shifts. 
+However, Transformer-based ReID models inevitably over-fit to domain-specific biases due to the supervised learning strategy on the source domain.
+We observe that while the global images of different IDs should have different features, their similar local parts (e.g., black backpack) are not bounded by this constraint. 
+Motivated by this, we propose a pure Transformer model (termed Part-aware Transformer) for DG-ReID by designing a proxy task, named Cross-ID Similarity Learning (CSL), to mine local visual information shared by different IDs. This proxy task allows the model to learn generic features because it only cares about the visual similarity of the parts regardless of the ID labels, thus alleviating the side effect of domain-specific biases. 
+Based on the local similarity obtained in CSL, a Part-guided Self-Distillation (PSD) is proposed to further improve the generalization of global features. 
+Our method achieves state-of-the-art performance under most DG ReID settings. 
+
+## Framework
+<div align=center><img src="https://github.com/liyuke65535/Part-Aware-Transformer/assets/39180877/f400b553-5a58-4238-9cde-a0d66e232586"></div>
+
+## Visualizations
+<div align=center><img src="https://github.com/liyuke65535/Part-Aware-Transformer/assets/39180877/a0f002c3-ef46-4d63-a3f0-e90dfe0ed61c"></div>
+<div align=center><img src="https://github.com/liyuke65535/Part-Aware-Transformer/assets/39180877/191e0958-46b1-4262-b850-e3264e919a4d"></div>
+
+
+
 Here are some instructions to run our code.
 Our code is based on [TransReID](https://github.com/damo-cv/TransReID), thanks for their excellent work.
 
