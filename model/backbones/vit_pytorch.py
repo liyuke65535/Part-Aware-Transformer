@@ -661,8 +661,8 @@ class part_Attention_ViT(nn.Module):
 
         cls_tokens = self.cls_token.expand(B, -1, -1)  # stole cls_tokens impl from Phil Wang, thanks
         part_token1 = self.part_token1.expand(B, -1, -1)
-        part_token2 = self.part_token1.expand(B, -1, -1)
-        part_token3 = self.part_token1.expand(B, -1, -1)
+        part_token2 = self.part_token2.expand(B, -1, -1)
+        part_token3 = self.part_token3.expand(B, -1, -1)
         x = torch.cat((cls_tokens, part_token1, part_token2, part_token3, x), dim=1)
 
         x = x + self.pos_embed
