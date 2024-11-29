@@ -14,6 +14,6 @@ For more details, please check visualization/vit_explain.py.
 
 ## No ideal reults?
 
-You can modify the options of the 67 line in visualization/vit_explain.py.
+You can modify the options of the line 67 in visualization/vit_explain.py.
 
 Moreover, learn about attention fusion in visualization/vit_rollout/vit_rollout.py.
