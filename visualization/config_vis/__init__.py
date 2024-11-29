@@ -1,0 +1,1 @@
+from .vit_b import _C as cfg

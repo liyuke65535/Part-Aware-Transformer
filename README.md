@@ -1,5 +1,13 @@
 # Part-Aware-Transformer
-Official repo for "Part-Aware Transformer for Generalizable Person Re-identification" [ICCV 2023]
+
+## 🔥 News
+We updated the visualization codes.
+
+See instructions in /visualization/readme.md.
+
+## Welcome
+
+This is the official repo for "Part-Aware Transformer for Generalizable Person Re-identification" [ICCV 2023]
 
 <div align=center><img src="https://github.com/liyuke65535/Part-Aware-Transformer/assets/39180877/a92d863d-43c7-48ca-b4d5-d34eef237fd5"></div>
 
