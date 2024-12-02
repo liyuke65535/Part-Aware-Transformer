@@ -102,8 +102,6 @@ if __name__ == '__main__':
             scheduler,
             loss_func,
             num_query, args.local_rank,
-            patch_centers = patch_centers,
-            pc_criterion = pc_criterion
         )
     else :
         do_train_dict[model_name](
